@@ -1,2 +1,2 @@
 
-New standalone page: https://osa60x.github.io/sabaaek-al-fakhama/fakhama-al-ostoura-live/
+Standalone page: https://osa60x.github.io/sabaaek-al-fakhama/fakhama-al-ostoura-live/
