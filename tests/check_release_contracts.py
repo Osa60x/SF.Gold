@@ -69,11 +69,14 @@ def main() -> int:
     require("@media(orientation:portrait){.site-qr{display:none}}" in index,
             "QR: لا توجد قاعدة إخفاء للوضع الطولي", failures)
 
-    # ---- أصول النسخة الجديدة ----
+    # ---- أصول النسخة الثانية ----
     for asset in ["assets/vendor/gsap.min.js", "assets/vendor/ScrollTrigger.min.js",
-                  "assets/hero-gold.jpg", "assets/collection-necklace.jpg",
-                  "assets/collection-ring.jpg", "assets/collection-bullion.jpg",
-                  "assets/noto-kufi-arabic-medium.ttf", "assets/bullion/10g.png"]:
+                  "assets/hero-v2.jpg", "assets/bg-veins.jpg",
+                  "assets/fonts/saudi-riyal-regular.woff2", "assets/fonts/saudi-riyal-bold.woff2",
+                  "assets/collection-necklace.jpg", "assets/collection-ring.jpg",
+                  "assets/collection-bullion.jpg", "assets/noto-kufi-arabic-medium.ttf",
+                  "assets/bullion-pamp/1g.jpg", "assets/bullion-pamp/10g.jpg",
+                  "assets/bullion-pamp/31-1g.jpg", "assets/bullion-pamp/100g.jpg"]:
         require((ROOT / asset).exists(), f"الأصول: {asset} غير موجود", failures)
     require("assets/index-" not in index and "AdminPage-" not in index,
             "البنية: الصفحة ما زالت تشير إلى حزم React القديمة", failures)
@@ -81,6 +84,28 @@ def main() -> int:
             "PWA: لا يتم تسجيل عامل الخدمة", failures)
     require("wa.me/966550441259" in index,
             "التواصل: رقم واتساب المعتمد غير موجود", failures)
+
+    # ---- مواصفة النسخة الثانية (تعديلات المالك) ----
+    require('<header class="site-head"' in index and 'id="ticker-track"' in index,
+            "الترتيب: الشريط المتحرك ليس داخل الرأس تحت اللوجو", failures)
+    require("id=\"calculator\"" not in index and "احسب سعر ذهبك" not in index and "calc-wa" not in index,
+            "الحذف: ما زالت الحاسبة الفورية موجودة", failures)
+    require("لماذا سبائك الفخامة" not in index and "وعدنا" not in index,
+            "الحذف: ما زال قسم الوعد/اللماذا موجوداً", failures)
+    require("نجاوبك خلال دقائق" not in index,
+            "الحذف: جملة نجاوبك خلال دقائق ما زالت موجودة", failures)
+    require("شاهد أسعار العيارات" not in index,
+            "الحذف: زر شاهد أسعار العيارات ما زال موجوداً", failures)
+    require("سبائك الفخامة</span> <span class=\"w grad\">الفخامة" not in index and "لبيع" in index and "وشراء" in index,
+            "النص: عنوان البطل الجديد (لبيع وشراء الذهب والمجوهرات) غير مطبق", failures)
+    require("⃁" in index and "saudi-riyal-regular.woff2" in index,
+            "العملة: رمز الريال ⃁ أو خطه غير مضمّنين", failures)
+    require("bullion-pamp/1g.jpg" in index and "bullion-pamp/100g.jpg" in index,
+            "السبائك: صور PAMP بالأوزان الحقيقية غير مستخدمة", failures)
+    require("PAMP" in index,
+            "السبائك: لا ذكر لسبائك PAMP", failures)
+    require("الفضة" not in index.split("ticker-track")[1].split("</header>")[0] if "ticker-track" in index else False,
+            "الشريط: ما زال يعرض الفضة أو غير المطلوب", failures)
 
     # ---- عقود لوحة الإدارة (كما كانت) ----
     require('id="login-error-summary" class="error-summary" role="alert" tabindex="-1" hidden' in admin,

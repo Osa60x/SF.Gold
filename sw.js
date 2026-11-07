@@ -1,13 +1,13 @@
 /* ============================================================
-   سبائك الفخامة — Service Worker
+   سبائك الفخامة — Service Worker (نسخة ٤)
    إستراتيجية:
-   - الصفحة (نavigate): الشبكة أولاً ثم ذاكرة التخزين (تحديث فوري عند التوفر)
+   - الصفحة (navigate): الشبكة أولاً ثم ذاكرة التخزين (تحديث فوري عند التوفر)
    - الأصول (assets): ذاكرة أولاً مع تحديث في الخلفية (سريع جداً)
    يعمل على GitHub Pages ضمن مسار فرعي (نطاق نسبي ./)
    ============================================================ */
 'use strict';
 
-const VERSION = 'sabaaek-cache-v3';
+const VERSION = 'sabaaek-cache-v4';
 const PRECACHE = [
   './',
   './index.html',
@@ -16,11 +16,21 @@ const PRECACHE = [
   './favicon.ico',
   './assets/noto-kufi-arabic-medium.ttf',
   './assets/noto-kufi-arabic-extrabold.ttf',
+  './assets/fonts/saudi-riyal-regular.woff2',
+  './assets/fonts/saudi-riyal-bold.woff2',
   './assets/vendor/gsap.min.js',
   './assets/vendor/ScrollTrigger.min.js',
-  './assets/hero-gold.jpg',
-  './assets/sabaaek-logo-user.png',
-  './assets/bullion/10g.png',
+  './assets/hero-v2.jpg',
+  './assets/bg-veins.jpg',
+  './assets/sabaaek-logo-user.webp',
+  './assets/bullion-pamp/1g.jpg',
+  './assets/bullion-pamp/2-5g.jpg',
+  './assets/bullion-pamp/5g.jpg',
+  './assets/bullion-pamp/10g.jpg',
+  './assets/bullion-pamp/20g.jpg',
+  './assets/bullion-pamp/31-1g.jpg',
+  './assets/bullion-pamp/50g.jpg',
+  './assets/bullion-pamp/100g.jpg',
   './sabaaek-site-qr.png'
 ];
 
