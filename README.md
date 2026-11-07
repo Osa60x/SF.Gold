@@ -1,91 +1,50 @@
-# سبائك الفخامة — لوحة أسعار الذهب
+# سبائك الفخامة — نسخة أوبسيديان وذهب ٢٠٢٦
 
-موقع ثابت (GitHub Pages) يعرض سعر الأونصة والعيارات 24/21/18 بالريال السعودي، مع مخطط تفاعلي متعدد المديات، ثيمات، وإدارة أسعار معزولة.
+موقع ثابت (GitHub Pages) بملف واحد يعرض سعر الأونصة والعيارات 24/21/18 بالريال السعودي،
+بتصميم فاخر داكن، حركة GSAP، مخطط تاريخي تفاعلي، حاسبة سعر، وسبائك تفاعلية.
 
 ## البنية الحالية (main)
 
-- **واجهة**: HTML/CSS/JS ثابتة مع ثيمات `emerald_classic`, `obsidian_glass`, `ivory_luxe` ومنع وميض الثيم عند البدء
-- **البيانات**: Cloudflare Worker `sabaaek-gold-api.osa60x.workers.dev` يحفظ:
-  - `gold_points` (36 ساعة خام)
-  - `gold_daily` (400 يوم ملخص)
-  - `gold_monthly` (ملخص شهري)
-  - `last_good_quote` مع كاش ذاكرة 25 ثانية + Edge Cache
-- **المخطط**: 24 ساعة / شهر / سنة مع فجوات مرئية ونص عربي صحيح للعدد
-- **الإدارة**: `admin.html` + Supabase Functions `sabaaek-admin` (تعديل أسعار العيارات فقط، مع عزل مشروع وكلمة مرور)
-- **الأصول**: شعار شفاف، خلفية obsidian، QR يظهر فقط في الوضع الأفقي، تحسين LCP
+- **الصفحة العامة**: `index.html` ملف واحد (HTML+CSS+JS بلا خطوة بناء) — سهل التعديل من تطبيق GitHub على الآيفون
+  - بطل سينمائي مع غبار ذهبي متحرك (Canvas) وهالتين ضوئيتين
+  - لوحة عيارات 24/21/18 مع عدّادات متحركة، اتجاه 24 ساعة، وخطوط مصغّرة
+  - مخطط SVG تفاعلي (24 ساعة / 7 أيام / 30 يوماً) بتلميح تحويم وفجوات صادقة
+  - حاسبة سعر فورية ترسل الناتج عبر واتساب برسالة جاهزة
+  - قسم سبائك تفاعلي (1 جرام → 100 جرام) بصور الأوزان الثمانية
+  - شريط أسعار متحرك، ثيمات `obsidian_glass` / `emerald_classic` / `ivory_luxe` بلا وميض
+  - خط كوفي عربي مستضاف محلياً + GSAP 3.15 + ScrollTrigger (محليان في `assets/vendor/`)
+- **البيانات**: Cloudflare Worker `sabaaek-gold-api.osa60x.workers.dev`
+  - `/quote` سعر الأونصة + `/history?range=24h|7d|30d`
+  - احتياط مباشر `api.gold-api.com` (XAU وXAG) ثم ذاكرة محلية مؤرخة
+- **تعديلات المتجر**: دالة Supabase `sabaaek-admin` (`?action=public-adjustments` و`?action=public-settings`) — عامة بلا تسجيل دخول، CORS مقيّد بـ `osa60x.github.io`
+- **الإدارة**: `admin.html` (دخول Supabase، تعديل عيارات، مديرو أسعار، مظهر وروابط) — لم تتغير
+- **الأرشيف**: `fakhama-al-ostoura-live/` نسخة قائمة بذاتها من الإصدار السابق
 
-## PWA (تمت إضافته من PR #1)
+## PWA
 
-من PR #1 تم دمج:
-
-- `manifest.webmanifest` + `sw.js` (عمل دون اتصال)
-- أيقونات `icon-192.png`, `icon-512.png`, `icon-512-maskable.png`, `apple-touch-icon.png`, `favicon.svg`
-- صورة مشاركة `og-image.png` (1200×630) + وسوم Open Graph
-- تسجيل Service Worker في `index.html`
+- `site.webmanifest` + `sw.js` (نسخة ذاكرة v3): عمل دون اتصال، الشبكة أولاً للصفحة والذاكرة أولاً للأصول
+- أيقونات في `icons/`، صورة مشاركة `og-sabaaek.png`، QR يظهر في الوضع الأفقي فقط
 
 ## مصادر البيانات
 
 | # | المصدر | الاستخدام |
 |---|--------|-----------|
 | 1 | Worker `sabaaek-gold-api.osa60x.workers.dev` `/quote` + `/history?range=` | أساسي مع سجل تاريخي |
-| 2 | `api.gold-api.com/price/XAU/USD` | احتياط مباشر (CORS) |
-| 3 | `api.goldprice.dev` + `xaus.com` | احتياطات إضافية (موجودة في إصدار arena السابق) |
+| 2 | `api.gold-api.com/price/XAU/USD` + `XAG` | احتياط مباشر (CORS مفتوح) |
+| 3 | ذاكرة `sabaaek-last-quote` | عرض آخر قراءة عند انقطاع الشبكة |
 
-الـ Worker الحالي يتحقق من:
-- `price` بين 1000 و 10000
-- `sourceUpdatedAt` ليس أقدم من 30 دقيقة
-- رفض القفزات >20% أو التواريخ الأقدم
-
-## تحقق ما قبل النشر
-
-قبل أي نشر يدوي، شغّل من جذر المشروع:
+## التحقق ما قبل النشر
 
 ```bash
-python3 tests/check_release_contracts.py
+python3 tests/check_release_contracts.py            # عقد الإصدار (أضف --no-live لتخطي فحص النسخة المنشورة)
+cd tests && npm install && node smoke_public_page.js # إقلاع كامل في DOM حقيقي (27 فحصاً)
 ```
 
-يتحقق العقد من:
-- عزل مشروع سبائك
-- مسار QR حسب الاتجاه
-- الشعار الشفاف
-- حركة التقليل
-- مسار التخطّي للوحة المفاتيح
-- حدود اللمس ورسائل الخطأ في لوحة الإدارة
-- قراءة النسخة المنشورة للتحقق من بقائها متاحة
+يتحقق عقد الإصدار من: عزل مشروع سبائك، مسار QR حسب الاتجاه، الشعار المحسّن بأولوية عالية،
+حماية بدء الثيم، مسار التخطي للوحة المفاتيح، حدود اللمس، وجود أصول النسخة الجديدة، وعقود لوحة الإدارة.
 
-لا يرسل النموذج بيانات دخول ولا يغير الأسعار أو إعدادات الموقع.
+## الاختبارات القديمة (Playwright)
 
-## الاختبارات
-
-```bash
-# اختبارات الواجهة والسجل
-python3 tests/test_chart_history_ranges.py
-python3 tests/test_chart_history_count_arabic_grammar.py
-python3 tests/test_theme_bootstrap.py
-# ... وغيرها في tests/
-```
-
-## النشر
-
-`push` إلى `main` ينشر تلقائياً عبر `.github/workflows/deploy-pages.yml`.
-
-## الملفات المدمجة من PR #1
-
-```
-manifest.webmanifest
-sw.js
-assets/icon-*.png, apple-touch-icon.png, favicon.svg, og-image.png
-assets/sabaaek-logo-360.png/webp, sabaaek-logo-720.webp
-تقرير-التحليل-والتطوير.md
-خطة-المرحلة-الثانية.md
-تحليل-فخامة-الأسطورة.md
-الرد-الموجه-إلى-Manus.md
-```
-
-## التالي (اختياري)
-
-- تفعيل تعديل الأسعار عبر `config.js` بسيط للآيفون (مقترح في خطة المرحلة الثانية)
-- زر وضع نهاري/ليلي صغير على الطرف
-- تقليل حجم المشروع بإزالة الحاسبة والتيكر إذا لم تعد مطلوبة (كانت في إصدار arena)
-
-الـ PR #1 تم دمجه في `main` بتاريخ 2026-09-21 عبر دمج يدوي مع حل تعارضات لصالح `main` المتقدم.
+اختبارات `tests/test_*.py` و`tests/audit_*.py` كُتبت لنسخة سابقة أحادية الملف ثم أصبحت متقادمة مع
+بناء React السابق، وتحتاج حزمة `playwright` ومتصفحاتها (غير متاحة في بيئات معزولة). البديل المعتمد
+الآن هو `tests/smoke_public_page.js` (jsdom) وعقد الإصدار أعلاه.

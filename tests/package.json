@@ -1,0 +1,11 @@
+{
+  "name": "sabaaek-site-tests",
+  "private": true,
+  "description": "اختبارات DOM لصفحة الأسعار العامة — تعمل بلا متصفح عبر jsdom",
+  "scripts": {
+    "smoke": "node smoke_public_page.js"
+  },
+  "devDependencies": {
+    "jsdom": "^24.13.0"
+  }
+}
