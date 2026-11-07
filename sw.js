@@ -7,21 +7,21 @@
    ============================================================ */
 'use strict';
 
-const VERSION = 'sabaaek-cache-v2';
+const VERSION = 'sabaaek-cache-v3';
 const PRECACHE = [
   './',
   './index.html',
-  './manifest.webmanifest',
-  './assets/favicon.svg',
-  './assets/icon-192.png',
-  './assets/icon-512.png',
-  './assets/apple-touch-icon.png',
-  './assets/og-image.png',
+  './site.webmanifest',
+  './favicon.svg',
+  './favicon.ico',
+  './assets/noto-kufi-arabic-medium.ttf',
+  './assets/noto-kufi-arabic-extrabold.ttf',
+  './assets/vendor/gsap.min.js',
+  './assets/vendor/ScrollTrigger.min.js',
+  './assets/hero-gold.jpg',
   './assets/sabaaek-logo-user.png',
-  './assets/sabaaek-site-qr.png',
-  './assets/sabaaek-official-logo-alpha.png',
-  './assets/sabaaek-official-logo-transparent-web.png',
-  './assets/saudi-riyal.svg'
+  './assets/bullion/10g.png',
+  './sabaaek-site-qr.png'
 ];
 
 self.addEventListener('install', event => {
